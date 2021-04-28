@@ -1,0 +1,40 @@
+Application Components:
+
+	Label - Employee Search
+	Label - Results
+
+	Label - First Name
+	Label - Last Name
+	Label - Position
+	Label - ID
+	Entry - firstNameEntry
+	Entry - lastNameEntry
+	Entry - positionEntry
+	Entry - idEntry
+	Button - searchButton
+	Button - createButton
+	Button - updateButton
+	Button - deleteButton
+	Button - viewAllButton
+	Listbox - resultsListbox
+	Scrollbar - resultsScrollbar
+	
+	
+Requirements:
+	Search:
+		-takes the data within the entry fields and populates the listbox with the matches from the database
+		-25 possible combinations of entries, from all fields empty to no fields empty
+			-this can be taken care of by using a smart SQL search query
+	
+	Create:
+		-takes the data within the entry fields, all of which must be filled and validated
+			-no duplicate IDs
+	
+	Update:
+		-clicking on a listbox result will populate the entries, and changes to those entries will be updated upon clicking update
+	
+	Delete:
+		-clicking on a listbox result will populate the entries, and that record will be deleted from the database upon clicking delete
+	
+	View All:
+		-all records within the database will be seen in the listbox
