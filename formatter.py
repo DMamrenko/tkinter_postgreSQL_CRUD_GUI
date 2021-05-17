@@ -8,5 +8,5 @@ def formatResults(rows):
 def reverseFormat(displayed):
     idLF, position = displayed.split(' - ')
     idL, F = idLF.split(', ')
-    iden, L = idL.split()
+    iden, L = idL.split(' ', 1)
     return([iden, F, L, position])

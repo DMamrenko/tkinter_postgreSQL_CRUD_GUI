@@ -18,10 +18,46 @@ def looseSearch(iden='', fname='', lname='', position=''):
     conn.close()
     return rows
 
+def strictSearchTupleBuild(iden, fname, lname, position):
+    p = []
+    if iden is not '':
+        p.append(iden)
+    if fname is not '':
+        p.append(fname)
+    if lname is not '':
+        p.append(lname)
+    if position is not '':
+        p.append(position)
+    return tuple(p)
+
+def strictSearchSQLBuild(iden, fname, lname, position):
+    SQL = 'SELECT * FROM employee WHERE '
+    params = []
+    if iden is not '':
+        params.append('id = ?')
+    if fname is not '':
+        params.append('first_name = ?')
+    if lname is not '':
+        params.append('last_name = ?')
+    if position is not '':
+        params.append('position = ?')
+    commands = ' AND '.join(params)
+    SQL += commands
+    return SQL
+
+
 def strictSearch(iden=None, fname=None, lname=None, position=None):
     conn = sqlite3.connect('employees.db')
     cur = conn.cursor()
-    cur.execute("""SELECT * FROM employee WHERE id=? OR first_name=? OR last_name=? OR position=?""", (iden, fname, lname, position))
+
+    #using helper functions
+    parameterTuple = strictSearchTupleBuild(iden, fname, lname, position)
+    SQLCommand = strictSearchSQLBuild(iden, fname, lname, position)
+    print(SQLCommand)
+    print(parameterTuple)
+
+    # Helper function for the query builder, and helper function for the tuple builder, finally run the cur.(execute)
+    cur.execute(SQLCommand, list(parameterTuple))
     rows = cur.fetchall()
     conn.close()
     return rows
