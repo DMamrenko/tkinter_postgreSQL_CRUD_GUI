@@ -50,13 +50,10 @@ def strictSearch(iden=None, fname=None, lname=None, position=None):
     conn = sqlite3.connect('employees.db')
     cur = conn.cursor()
 
-    #using helper functions
+    # Using helper functions to find non-empty parameters, and to build the SQL Query
     parameterTuple = strictSearchTupleBuild(iden, fname, lname, position)
     SQLCommand = strictSearchSQLBuild(iden, fname, lname, position)
-    print(SQLCommand)
-    print(parameterTuple)
 
-    # Helper function for the query builder, and helper function for the tuple builder, finally run the cur.(execute)
     cur.execute(SQLCommand, list(parameterTuple))
     rows = cur.fetchall()
     conn.close()

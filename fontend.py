@@ -51,10 +51,12 @@ def viewAllCommand():
     for row in allRows:
         resultsListbox.insert(END, row)
     clearFields()
+    updateStatusText(f'Showing {len(rows)} results.')
 
 def hideAllCommand():
     clearResultsListbox()
     clearFields()
+    updateStatusText(f'Hiding all results.')
 
 def searchByEnter(event):
     searchCommand()
@@ -76,38 +78,46 @@ def searchCommand():
     # Changing status depending on how many results found.
     if len(rows) == 0:
         updateStatusText('No results found.')
+    elif len(rows) == 1:
+        updateStatusText('1 result found.')
     else:
-        updateStatusText(f'{len(rows)} result(s) found.')
+        updateStatusText(f'{len(rows)} results found.')
 
 def insertCommand():
     fname, lname, position = fnameText.get(), lnameText.get(), positionText.get()
     if validator.validateInsertion(fname, lname, position):
         backend.insert(fname, lname, position)
-        updateStatusText('Record created: {} {}'.format(fname, lname))
         clearFields()
         viewAllCommand()
+        updateStatusText('Record created: {} {}'.format(fname, lname))
     else:
         updateStatusText('Record creation incomplete. Fill required fields.')
 
 def deleteCommand():
     deleteID = formatter.reverseFormat(selectedRow)[0]
     backend.delete(deleteID)
-    updateStatusText('Record with ID {} deleted.'.format(deleteID))
     clearFields()
     viewAllCommand()
+    updateStatusText(f'Record with ID {deleteID} deleted.')
+
 
 def updateCommand():
-    iden = formatter.reverseFormat(selectedRow)[0]
-    backend.update(iden, fnameText.get(), lnameText.get(), positionText.get())
-    updateStatusText('Record with ID {} has been updated.'.format(iden))
-    clearFields()
-    viewAllCommand()
+    try:
+        iden = formatter.reverseFormat(selectedRow)[0]
+        fname, lname, position = fnameText.get(), lnameText.get(), positionText.get()
+        backend.update(iden, fname, lname, position)
+        clearFields()
+        viewAllCommand()
+        updateStatusText(f'Record with ID {iden} has been updated.')
+    # if there is no selectedRow
+    except NameError:
+        updateStatusText('Please select a record to update.')
+
 
 # Creating the Window
 window = Tk()
 window.geometry('700x380')
 window.title('Tkinter/SQL GUI')
-# window.configure(bg='white')
 window.bind('<Return>', searchByEnter)
 window.bind('<MouseWheel>', onMouseWheel)
 
